@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KatyB Pet — Commission</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;min-height:100vh}
+.app{max-width:520px;margin:0 auto;padding:1rem}
+.header{text-align:center;padding:1.25rem 0 1rem}
+.header h1{font-size:20px;font-weight:600;color:#1a1a1a}
+.header p{font-size:13px;color:#888;margin-top:4px}
+.tabs{display:flex;border:1px solid #ddd;border-radius:10px;overflow:hidden;margin-bottom:14px;background:#f0ede8}
+.tab{flex:1;padding:10px 8px;font-size:13px;font-weight:500;text-align:center;cursor:pointer;background:transparent;color:#888;border:none}
+.tab.active{background:#fff;color:#1a1a1a;border-radius:9px;margin:2px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.page{display:none}.page.active{display:block}
+.card{background:#fff;border:1px solid #e8e8e8;border-radius:14px;padding:1.25rem;margin-bottom:12px}
+.section-title{font-size:11px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px}
+.field{margin-bottom:14px}.field:last-child{margin-bottom:0}
+label.field-label{display:block;font-size:13px;color:#666;margin-bottom:5px;font-weight:500}
+input[type=text],input[type=number],select{width:100%;font-size:15px;padding:10px 12px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none;-webkit-appearance:none}
+input:focus,select:focus{border-color:#185FA5;box-shadow:0 0 0 3px rgba(24,95,165,0.1)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.toggle-group{display:flex;gap:6px}
+.toggle-btn{flex:1;padding:9px 10px;font-size:13px;font-weight:500;border:1px solid #e0e0e0;border-radius:10px;background:#f8f8f6;color:#888;cursor:pointer;text-align:center;transition:all 0.15s}
+.toggle-btn.active{background:#EBF3FC;border-color:#185FA5;color:#185FA5}
+.checkbox-wrap{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid #e8e8e8;border-radius:10px;background:#f8f8f6;cursor:pointer;user-select:none}
+.checkbox-wrap input[type=checkbox]{width:17px;height:17px;accent-color:#185FA5;cursor:pointer}
+.checkbox-wrap .label-text{font-size:14px;color:#1a1a1a}
+.badge-loyal{margin-left:auto;font-size:11px;padding:3px 9px;border-radius:8px;background:#EAFAF1;color:#0F6E56;font-weight:500}
+.price-hint{font-size:13px;font-weight:500;color:#185FA5;padding:6px 0;display:none}
+.btn-primary{width:100%;padding:13px;font-size:15px;font-weight:600;border:none;border-radius:12px;background:#185FA5;color:#fff;cursor:pointer;margin-bottom:10px;transition:all 0.15s}
+.btn-primary:hover{background:#0C447C}
+.btn-primary:active{transform:scale(0.98)}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed}
+.btn-save{background:#085041}
+.btn-save:hover{background:#04342C}
+.btn-secondary{width:100%;padding:11px;font-size:14px;border:1px solid #ddd;border-radius:12px;background:transparent;color:#666;cursor:pointer;margin-bottom:10px}
+.btn-secondary:hover{background:#f5f5f0}
+.err{font-size:12px;color:#A32D2D;margin-top:4px;display:none}
+.result-card{background:#EBF3FC;border:1px solid #B5D4F4;border-radius:14px;padding:1.25rem;margin-bottom:12px;display:none}
+.result-card.show{display:block}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(24,95,165,0.12)}
+.result-row:last-child{border-bottom:none;padding-top:12px;margin-top:4px}
+.result-label{font-size:13px;color:#185FA5}
+.result-value{font-size:13px;color:#185FA5;font-weight:500}
+.result-total-label{font-size:14px;color:#185FA5;font-weight:600}
+.result-total{font-size:26px;font-weight:700;color:#185FA5}
+.filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.filter-btn{padding:7px 13px;font-size:13px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#666;cursor:pointer;font-weight:500}
+.filter-btn.active{background:#185FA5;border-color:#185FA5;color:#fff}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.summary-card{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:10px 12px;text-align:center}
+.summary-label{font-size:11px;color:#aaa;margin-bottom:4px;font-weight:500}
+.summary-val{font-size:16px;font-weight:600;color:#1a1a1a}
+.summary-val.comm{color:#0F6E56}
+.bill-item{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:13px 14px;margin-bottom:8px}
+.bill-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.bill-name{font-size:14px;font-weight:600;color:#1a1a1a}
+.bill-comm{font-size:15px;font-weight:700;color:#0F6E56}
+.bill-meta{font-size:12px;color:#888;line-height:1.8}
+.bill-badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:6px;margin-left:6px;font-weight:500}
+.badge-quen{background:#EAFAF1;color:#0F6E56}
+.badge-thuong{background:#f0ede8;color:#888}
+.empty{text-align:center;padding:36px 16px;color:#aaa;font-size:14px}
+.loading{text-align:center;padding:24px;color:#aaa;font-size:13px}
+.search-row{display:flex;gap:8px;margin-bottom:12px}
+.search-row input{flex:1}
+.search-row select{width:110px}
+.search-row button{padding:10px 16px;font-size:13px;font-weight:600;border:none;border-radius:10px;background:#185FA5;color:#fff;cursor:pointer;white-space:nowrap}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:12px;font-size:13px;font-weight:500;display:none;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.15)}
+.toast.show{display:block}
+.toast.ok{background:#085041;color:#fff}
+.toast.err{background:#A32D2D;color:#fff}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>KatyB Pet</h1>
+    <p>Commission Calculator</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('input')">Nhập Bill</button>
+    <button class="tab" onclick="switchTab('history')">Lịch sử</button>
+    <button class="tab" onclick="switchTab('search')">Tìm kiếm</button>
+  </div>
+
+  <!-- TAB NHẬP BILL -->
+  <div class="page active" id="page-input">
+    <div class="card">
+      <div class="section-title">Thông tin chủ Pet</div>
+      <div class="field">
+        <label class="field-label">Số điện thoại</label>
+        <input type="text" id="phone" placeholder="09xx xxx xxx" maxlength="11">
+        <div class="err" id="err-phone">Vui lòng nhập số điện thoại</div>
+      </div>
+      <div class="field">
+        <label class="field-label">Tên Pet</label>
+        <input type="text" id="petname" placeholder="VD: Bo, Miu, Khoai...">
+        <div class="err" id="err-petname">Vui lòng nhập tên Pet</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Thông tin Pet</div>
+      <div class="field">
+        <label class="field-label">Loại thú cưng</label>
+        <div class="toggle-group">
+          <div class="toggle-btn active" id="btn-cho" onclick="selectType('cho')">Cún</div>
+          <div class="toggle-btn" id="btn-meo" onclick="selectType('meo')">Miu (Mèo)</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label class="field-label">Giới tính</label>
+          <div class="toggle-group">
+            <div class="toggle-btn active" id="btn-male" onclick="selectGender('male')">Đực</div>
+            <div class="toggle-btn" id="btn-female" onclick="selectGender('female')">Cái</div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Trọng lượng (kg)</label>
+          <input type="number" id="weight" placeholder="1.8" step="0.1" min="0" oninput="updatePriceHint()">
+          <div class="err" id="err-weight">Nhập trọng lượng</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Dịch vụ</div>
+      <div class="field">
+        <label class="field-label">Gói dịch vụ</label>
+        <select id="package" onchange="onPkgChange()">
+          <option value="">-- Chọn gói --</option>
+          <option value="silver">Silver — Gói sạch toàn thân</option>
+          <option value="gold">Gold — Gói cắt tỉa cơ bản</option>
+          <option value="platinum">Platinum — Gói đẹp toàn diện</option>
+          <option value="hotel">Khách sạn thú cưng</option>
+        </select>
+        <div class="err" id="err-package">Vui lòng chọn gói</div>
+        <div class="price-hint" id="price-hint"></div>
+      </div>
+      <div id="hotel-extra" style="display:none">
+        <div class="field">
+          <label class="field-label">Loại phòng</label>
+          <select id="hotel-type" onchange="updatePriceHint()">
+            <option value="">-- Chọn loại --</option>
+            <option value="cho-small">Cún 1–10kg / ngày (200k)</option>
+            <option value="cho-large">Cún 10–20kg / ngày (250k)</option>
+            <option value="meo-deluxe">Miu Deluxe / ngày (130k)</option>
+            <option value="meo-standard">Miu Standard / ngày (200k)</option>
+            <option value="meo-vip">Miu VIP / ngày (350k)</option>
+          </select>
+          <div class="err" id="err-hotel">Chọn loại phòng</div>
+        </div>
+        <div class="field">
+          <label class="field-label">Số ngày lưu trú</label>
+          <input type="number" id="nights" value="1" min="1" step="1" oninput="updatePriceHint()">
+        </div>
+      </div>
+      <div class="field">
+        <label class="checkbox-wrap">
+          <input type="checkbox" id="loyal">
+          <span class="label-text">Khách quen</span>
+          <span class="badge-loyal">30% commission</span>
+        </label>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="btn-calc" onclick="calculate()">Tính hoa hồng</button>
+
+    <div class="result-card" id="result-card">
+      <div class="section-title" style="color:#185FA5;margin-bottom:12px">Kết quả bill</div>
+      <div class="result-row"><span class="result-label">Pet</span><span class="result-value" id="res-pet"></span></div>
+      <div class="result-row"><span class="result-label">SĐT</span><span class="result-value" id="res-phone"></span></div>
+      <div class="result-row"><span class="result-label">Gói dịch vụ</span><span class="result-value" id="res-pkg"></span></div>
+      <div class="result-row"><span class="result-label">Giá bill</span><span class="result-value" id="res-price"></span></div>
+      <div class="result-row"><span class="result-label">Loại khách</span><span class="result-value" id="res-type"></span></div>
+      <div class="result-row"><span class="result-label">% Hoa hồng</span><span class="result-value" id="res-pct"></span></div>
+      <div class="result-row">
+        <span class="result-total-label">Hoa hồng nhận được</span>
+        <span class="result-total" id="res-comm"></span>
+      </div>
+    </div>
+
+    <button class="btn-primary btn-save" id="btn-save" style="display:none" onclick="saveBill()">Lưu bill vào database</button>
+    <button class="btn-secondary" id="btn-reset" style="display:none" onclick="resetForm()">Nhập bill mới</button>
+  </div>
+
+  <!-- TAB LỊCH SỬ -->
+  <div class="page" id="page-history">
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="setFilter('today',this)">Hôm nay</button>
+      <button class="filter-btn" onclick="setFilter('3days',this)">3 ngày</button>
+      <button class="filter-btn" onclick="setFilter('7days',this)">7 ngày</button>
+      <button class="filter-btn" onclick="setFilter('30days',this)">30 ngày</button>
+    </div>
+    <div class="summary-grid">
+      <div class="summary-card"><div class="summary-label">Số bill</div><div class="summary-val" id="sum-count">—</div></div>
+      <div class="summary-card"><div class="summary-label">Tổng doanh thu</div><div class="summary-val" id="sum-price">—</div></div>
+      <div class="summary-card"><div class="summary-label">Tổng hoa hồng</div><div class="summary-val comm" id="sum-comm">—</div></div>
+    </div>
+    <div id="history-list"><div class="loading">Đang tải...</div></div>
+  </div>
+
+  <!-- TAB TÌM KIẾM -->
+  <div class="page" id="page-search">
+    <div class="search-row">
+      <input type="text" id="search-input" placeholder="Nhập từ khóa...">
+      <select id="search-type">
+        <option value="phone">SĐT</option>
+        <option value="petname">Tên Pet</option>
+      </select>
+      <button onclick="doSearch()">Tìm</button>
+    </div>
+    <div class="summary-grid" id="search-summary" style="display:none">
+      <div class="summary-card"><div class="summary-label">Số bill</div><div class="summary-val" id="srch-count">—</div></div>
+      <div class="summary-card"><div class="summary-label">Tổng doanh thu</div><div class="summary-val" id="srch-price">—</div></div>
+      <div class="summary-card"><div class="summary-label">Tổng hoa hồng</div><div class="summary-val comm" id="srch-comm">—</div></div>
+    </div>
+    <div id="search-list"><div class="empty">Nhập SĐT hoặc tên Pet để tìm kiếm</div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbwRptZwHSWVgmQI9J9_wZGfPUpz4QU93s48C11xlg8ngHMEragOusZzS0F7NeZWmTbUEg/exec";
+
+const PRICES = {
+  silver:{cho:[{max:3,p:140},{max:5,p:170},{max:7,p:210},{max:10,p:260},{max:15,p:320},{max:20,p:370},{max:30,p:450},{max:999,p:570}],meo:[{max:2,p:140},{max:4,p:190},{max:6,p:240},{max:8,p:290},{max:999,p:420}]},
+  gold:{cho:[{max:3,p:170},{max:5,p:200},{max:7,p:240},{max:10,p:300},{max:15,p:370},{max:20,p:430},{max:30,p:500},{max:999,p:600}],meo:[{max:2,p:180},{max:4,p:220},{max:6,p:260},{max:8,p:350},{max:999,p:500}]},
+  platinum:{cho:[{max:3,p:350},{max:5,p:380},{max:7,p:410},{max:10,p:450},{max:15,p:500},{max:20,p:600},{max:30,p:690},{max:999,p:720}],meo:[{max:2,p:290},{max:4,p:310},{max:6,p:410},{max:8,p:490},{max:999,p:600}]},
+  hotel:{'cho-small':200,'cho-large':250,'meo-deluxe':130,'meo-standard':200,'meo-vip':350}
+};
+const COMM={silver:{regular:10,loyal:30},gold:{regular:10,loyal:30},platinum:{regular:15,loyal:30},hotel:{regular:20,loyal:30}};
+const PKG_NAMES={silver:'Silver',gold:'Gold',platinum:'Platinum',hotel:'Khách sạn'};
+
+let petType='cho', gender='male', currentBill=null, currentFilter='today';
+
+function selectType(t){petType=t;['cho','meo'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x===t));updatePriceHint()}
+function selectGender(g){gender=g;['male','female'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x===g))}
+function showErr(id,show){document.getElementById(id).style.display=show?'block':'none'}
+
+function getPrice(pkg,type,w){
+  const tiers=PRICES[pkg][type];
+  for(let t of tiers)if(w<=t.max)return t.p;
+  return tiers[tiers.length-1].p;
+}
+
+function updatePriceHint(){
+  const pkg=document.getElementById('package').value;
+  const w=parseFloat(document.getElementById('weight').value);
+  const hint=document.getElementById('price-hint');
+  if(pkg==='hotel'){
+    const ht=document.getElementById('hotel-type').value;
+    const nights=parseInt(document.getElementById('nights').value)||1;
+    if(ht){const p=PRICES.hotel[ht]*nights;hint.textContent='Tổng: '+p.toLocaleString()+'.000 VNĐ ('+nights+' ngày)';hint.style.display='block';}
+    else hint.style.display='none';
+  } else if(pkg&&w>0){
+    const p=getPrice(pkg,petType,w);
+    hint.textContent='Giá menu: '+p.toLocaleString()+'.000 VNĐ';
+    hint.style.display='block';
+  } else hint.style.display='none';
+}
+
+function onPkgChange(){
+  const pkg=document.getElementById('package').value;
+  document.getElementById('hotel-extra').style.display=pkg==='hotel'?'block':'none';
+  updatePriceHint();
+}
+
+function showToast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show '+type;
+  setTimeout(()=>{t.className='toast'},3000);
+}
+
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const names=['input','history','search'];
+    t.classList.toggle('active',names[i]===name);
+  });
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(name==='history')loadHistory(currentFilter);
+}
+
+function calculate(){
+  const phone=document.getElementById('phone').value.trim();
+  const petname=document.getElementById('petname').value.trim();
+  const weight=parseFloat(document.getElementById('weight').value);
+  const pkg=document.getElementById('package').value;
+  const loyal=document.getElementById('loyal').checked;
+  let valid=true;
+  showErr('err-phone',!phone);if(!phone)valid=false;
+  showErr('err-petname',!petname);if(!petname)valid=false;
+  showErr('err-weight',!weight||weight<=0);if(!weight||weight<=0)valid=false;
+  showErr('err-package',!pkg);if(!pkg)valid=false;
+  if(pkg==='hotel'){const ht=document.getElementById('hotel-type').value;showErr('err-hotel',!ht);if(!ht)valid=false;}
+  if(!valid)return;
+
+  let basePrice=0,hotelType='',nights=1,pkgDisplay=PKG_NAMES[pkg];
+  if(pkg==='hotel'){
+    hotelType=document.getElementById('hotel-type').value;
+    nights=parseInt(document.getElementById('nights').value)||1;
+    basePrice=PRICES.hotel[hotelType]*nights;
+    const htNames={'cho-small':'Cún 1–10kg','cho-large':'Cún 10–20kg','meo-deluxe':'Miu Deluxe','meo-standard':'Miu Standard','meo-vip':'Miu VIP'};
+    pkgDisplay+=' — '+htNames[hotelType]+' × '+nights+' ngày';
+  } else {
+    basePrice=getPrice(pkg,petType,weight);
+  }
+  const pct=COMM[pkg][loyal?'loyal':'regular'];
+  const commission=Math.round(basePrice*pct/100);
+
+  currentBill={phone,petName:petname,petType,gender,weight,package:pkg,hotelType,nights,basePrice,isLoyal:loyal,commissionPct:pct,commission};
+
+  document.getElementById('res-pet').textContent=petname+' ('+(petType==='cho'?'Cún':'Miu')+', '+(gender==='male'?'Đực':'Cái')+', '+weight+'kg)';
+  document.getElementById('res-phone').textContent=phone;
+  document.getElementById('res-pkg').textContent=pkgDisplay;
+  document.getElementById('res-price').textContent=basePrice.toLocaleString()+'.000 VNĐ';
+  document.getElementById('res-type').textContent=loyal?'Khách quen':'Khách thường';
+  document.getElementById('res-pct').textContent=pct+'%';
+  document.getElementById('res-comm').textContent=commission.toLocaleString()+'.000 VNĐ';
+
+  document.getElementById('result-card').classList.add('show');
+  document.getElementById('btn-calc').style.display='none';
+  document.getElementById('btn-save').style.display='block';
+  document.getElementById('btn-reset').style.display='block';
+}
+
+async function saveBill(){
+  if(!currentBill)return;
+  const btn=document.getElementById('btn-save');
+  btn.disabled=true;btn.textContent='Đang lưu...';
+  try{
+    const b=currentBill;
+    const params=new URLSearchParams({
+      action:'addBill',
+      phone:b.phone, petName:b.petName, petType:b.petType,
+      gender:b.gender, weight:b.weight, package:b.package,
+      hotelType:b.hotelType, nights:b.nights, basePrice:b.basePrice,
+      isLoyal:b.isLoyal, commissionPct:b.commissionPct, commission:b.commission
+    });
+    const res=await fetch(API+'?'+params.toString());
+    const data=await res.json();
+    if(data.success){
+      showToast('Đã lưu bill '+data.id+'!','ok');
+      btn.style.display='none';
+    } else {
+      showToast('Lỗi: '+data.error,'err');
+      btn.disabled=false;btn.textContent='Lưu bill vào database';
+    }
+  } catch(e){
+    showToast('Lỗi kết nối: '+e.message,'err');
+    btn.disabled=false;btn.textContent='Lưu bill vào database';
+  }
+}
+
+function resetForm(){
+  ['phone','petname','weight'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('package').value='';
+  document.getElementById('loyal').checked=false;
+  document.getElementById('hotel-extra').style.display='none';
+  document.getElementById('price-hint').style.display='none';
+  document.getElementById('result-card').classList.remove('show');
+  document.getElementById('btn-calc').style.display='block';
+  document.getElementById('btn-save').style.display='none';
+  document.getElementById('btn-save').disabled=false;
+  document.getElementById('btn-save').textContent='Lưu bill vào database';
+  document.getElementById('btn-reset').style.display='none';
+  petType='cho';gender='male';currentBill=null;
+  ['cho','meo'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x==='cho'));
+  ['male','female'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x==='male'));
+}
+
+function setFilter(f,el){
+  currentFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  loadHistory(f);
+}
+
+async function loadHistory(filter){
+  document.getElementById('history-list').innerHTML='<div class="loading">Đang tải...</div>';
+  try{
+    const res=await fetch(API+'?action=query&filter='+filter);
+    const data=await res.json();
+    if(data.success) renderBills(data,'history-list','sum-count','sum-price','sum-comm');
+    else document.getElementById('history-list').innerHTML='<div class="empty">Lỗi tải dữ liệu</div>';
+  } catch(e){
+    document.getElementById('history-list').innerHTML='<div class="empty">Không kết nối được</div>';
+  }
+}
+
+async function doSearch(){
+  const q=document.getElementById('search-input').value.trim();
+  const type=document.getElementById('search-type').value;
+  if(!q){showToast('Nhập từ khóa để tìm','err');return;}
+  document.getElementById('search-list').innerHTML='<div class="loading">Đang tìm...</div>';
+  document.getElementById('search-summary').style.display='none';
+  try{
+    const res=await fetch(API+'?action=query&filter=all&search='+encodeURIComponent(q)+'&searchType='+type);
+    const data=await res.json();
+    if(data.success){
+      document.getElementById('search-summary').style.display='grid';
+      renderBills(data,'search-list','srch-count','srch-price','srch-comm');
+    }
+  } catch(e){
+    document.getElementById('search-list').innerHTML='<div class="empty">Không kết nối được</div>';
+  }
+}
+
+function renderBills(data,listId,countId,priceId,commId){
+  document.getElementById(countId).textContent=data.count||0;
+  document.getElementById(priceId).textContent=data.totalPrice?(Number(data.totalPrice)).toLocaleString()+'k':'0k';
+  document.getElementById(commId).textContent=data.totalComm?(Number(data.totalComm)).toLocaleString()+'k':'0k';
+  const list=document.getElementById(listId);
+  if(!data.bills||data.bills.length===0){list.innerHTML='<div class="empty">Không có bill nào</div>';return;}
+  list.innerHTML=data.bills.slice().reverse().map(b=>`
+    <div class="bill-item">
+      <div class="bill-top">
+        <div>
+          <span class="bill-name">${b.petName}</span>
+          <span class="bill-badge ${b.isLoyal==='Quen'?'badge-quen':'badge-thuong'}">${b.isLoyal==='Quen'?'Khách quen':'Khách thường'}</span>
+        </div>
+        <div class="bill-comm">+${Number(b.commission).toLocaleString()}k</div>
+      </div>
+      <div class="bill-meta">
+        ${b.phone} · ${b.petType==='cho'?'Cún':'Miu'} ${b.weight}kg · ${String(b.package).toUpperCase()}<br>
+        Bill: ${Number(b.basePrice).toLocaleString()}k · ${b.commissionPct}% commission · ${b.timestamp}
+      </div>
+    </div>
+  `).join('');
+}
+
+loadHistory('today');
+</script>
+</body>
+</html>
