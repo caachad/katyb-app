@@ -19,7 +19,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .section-title{font-size:11px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px}
 .field{margin-bottom:14px}.field:last-child{margin-bottom:0}
 label.field-label{display:block;font-size:13px;color:#666;margin-bottom:5px;font-weight:500}
-input[type=text],input[type=number],select{width:100%;font-size:15px;padding:10px 12px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none;-webkit-appearance:none}
+input[type=text],input[type=number],input[type=date],select{width:100%;font-size:15px;padding:10px 12px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none;-webkit-appearance:none}
 input:focus,select:focus{border-color:#185FA5;box-shadow:0 0 0 3px rgba(24,95,165,0.1)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .toggle-group{display:flex;gap:6px}
@@ -27,15 +27,13 @@ input:focus,select:focus{border-color:#185FA5;box-shadow:0 0 0 3px rgba(24,95,16
 .toggle-btn.active{background:#EBF3FC;border-color:#185FA5;color:#185FA5}
 .checkbox-wrap{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid #e8e8e8;border-radius:10px;background:#f8f8f6;cursor:pointer;user-select:none}
 .checkbox-wrap input[type=checkbox]{width:17px;height:17px;accent-color:#185FA5;cursor:pointer}
-.checkbox-wrap .label-text{font-size:14px;color:#1a1a1a}
 .badge-loyal{margin-left:auto;font-size:11px;padding:3px 9px;border-radius:8px;background:#EAFAF1;color:#0F6E56;font-weight:500}
 .price-hint{font-size:13px;font-weight:500;color:#185FA5;padding:6px 0;display:none}
 .btn-primary{width:100%;padding:13px;font-size:15px;font-weight:600;border:none;border-radius:12px;background:#185FA5;color:#fff;cursor:pointer;margin-bottom:10px;transition:all 0.15s}
 .btn-primary:hover{background:#0C447C}
 .btn-primary:active{transform:scale(0.98)}
 .btn-primary:disabled{opacity:0.5;cursor:not-allowed}
-.btn-save{background:#085041}
-.btn-save:hover{background:#04342C}
+.btn-save{background:#085041}.btn-save:hover{background:#04342C}
 .btn-secondary{width:100%;padding:11px;font-size:14px;border:1px solid #ddd;border-radius:12px;background:transparent;color:#666;cursor:pointer;margin-bottom:10px}
 .btn-secondary:hover{background:#f5f5f0}
 .err{font-size:12px;color:#A32D2D;margin-top:4px;display:none}
@@ -47,9 +45,13 @@ input:focus,select:focus{border-color:#185FA5;box-shadow:0 0 0 3px rgba(24,95,16
 .result-value{font-size:13px;color:#185FA5;font-weight:500}
 .result-total-label{font-size:14px;color:#185FA5;font-weight:600}
 .result-total{font-size:26px;font-weight:700;color:#185FA5}
-.filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.filter-btn{padding:7px 13px;font-size:13px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#666;cursor:pointer;font-weight:500}
+.filter-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.filter-btn{padding:7px 13px;font-size:13px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#666;cursor:pointer;font-weight:500;white-space:nowrap}
 .filter-btn.active{background:#185FA5;border-color:#185FA5;color:#fff}
+.daterange-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:12px;align-items:end}
+.daterange-row label{font-size:12px;color:#888;display:block;margin-bottom:4px}
+.daterange-row input{font-size:13px;padding:8px 10px}
+.daterange-row button{padding:9px 14px;font-size:13px;font-weight:600;border:none;border-radius:10px;background:#185FA5;color:#fff;cursor:pointer;white-space:nowrap}
 .summary-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
 .summary-card{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:10px 12px;text-align:center}
 .summary-label{font-size:11px;color:#aaa;margin-bottom:4px;font-weight:500}
@@ -68,7 +70,7 @@ input:focus,select:focus{border-color:#185FA5;box-shadow:0 0 0 3px rgba(24,95,16
 .search-row{display:flex;gap:8px;margin-bottom:12px}
 .search-row input{flex:1}
 .search-row select{width:110px}
-.search-row button{padding:10px 16px;font-size:13px;font-weight:600;border:none;border-radius:10px;background:#185FA5;color:#fff;cursor:pointer;white-space:nowrap}
+.search-row button{padding:10px 16px;font-size:13px;font-weight:600;border:none;border-radius:10px;background:#185FA5;color:#fff;cursor:pointer}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:12px;font-size:13px;font-weight:500;display:none;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.15)}
 .toast.show{display:block}
 .toast.ok{background:#085041;color:#fff}
@@ -164,7 +166,7 @@ input:focus,select:focus{border-color:#185FA5;box-shadow:0 0 0 3px rgba(24,95,16
       <div class="field">
         <label class="checkbox-wrap">
           <input type="checkbox" id="loyal">
-          <span class="label-text">Khách quen</span>
+          <span style="font-size:14px;color:#1a1a1a">Khách quen</span>
           <span class="badge-loyal">30% commission</span>
         </label>
       </div>
@@ -196,7 +198,21 @@ input:focus,select:focus{border-color:#185FA5;box-shadow:0 0 0 3px rgba(24,95,16
       <button class="filter-btn active" onclick="setFilter('today',this)">Hôm nay</button>
       <button class="filter-btn" onclick="setFilter('3days',this)">3 ngày</button>
       <button class="filter-btn" onclick="setFilter('7days',this)">7 ngày</button>
-      <button class="filter-btn" onclick="setFilter('30days',this)">30 ngày</button>
+      <button class="filter-btn" onclick="setFilter('thismonth',this)">Tháng này</button>
+      <button class="filter-btn" onclick="setFilter('daterange',this)">Khoảng ngày</button>
+    </div>
+    <div id="daterange-picker" style="display:none">
+      <div class="daterange-row">
+        <div>
+          <label>Từ ngày</label>
+          <input type="date" id="date-from">
+        </div>
+        <div>
+          <label>Đến ngày</label>
+          <input type="date" id="date-to">
+        </div>
+        <button onclick="applyDateRange()">Lọc</button>
+      </div>
     </div>
     <div class="summary-grid">
       <div class="summary-card"><div class="summary-label">Số bill</div><div class="summary-val" id="sum-count">—</div></div>
@@ -239,7 +255,7 @@ const PRICES = {
 const COMM={silver:{regular:10,loyal:30},gold:{regular:10,loyal:30},platinum:{regular:15,loyal:30},hotel:{regular:20,loyal:30}};
 const PKG_NAMES={silver:'Silver',gold:'Gold',platinum:'Platinum',hotel:'Khách sạn'};
 
-let petType='cho', gender='male', currentBill=null, currentFilter='today';
+let petType='cho',gender='male',currentBill=null,currentFilter='today';
 
 function selectType(t){petType=t;['cho','meo'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x===t));updatePriceHint()}
 function selectGender(g){gender=g;['male','female'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x===g))}
@@ -258,18 +274,16 @@ function updatePriceHint(){
   if(pkg==='hotel'){
     const ht=document.getElementById('hotel-type').value;
     const nights=parseInt(document.getElementById('nights').value)||1;
-    if(ht){const p=PRICES.hotel[ht]*nights;hint.textContent='Tổng: '+p.toLocaleString()+'.000 VNĐ ('+nights+' ngày)';hint.style.display='block';}
+    if(ht){hint.textContent='Tổng: '+(PRICES.hotel[ht]*nights).toLocaleString()+'.000 VNĐ';hint.style.display='block';}
     else hint.style.display='none';
   } else if(pkg&&w>0){
-    const p=getPrice(pkg,petType,w);
-    hint.textContent='Giá menu: '+p.toLocaleString()+'.000 VNĐ';
+    hint.textContent='Giá menu: '+getPrice(pkg,petType,w).toLocaleString()+'.000 VNĐ';
     hint.style.display='block';
   } else hint.style.display='none';
 }
 
 function onPkgChange(){
-  const pkg=document.getElementById('package').value;
-  document.getElementById('hotel-extra').style.display=pkg==='hotel'?'block':'none';
+  document.getElementById('hotel-extra').style.display=document.getElementById('package').value==='hotel'?'block':'none';
   updatePriceHint();
 }
 
@@ -281,12 +295,11 @@ function showToast(msg,type='ok'){
 
 function switchTab(name){
   document.querySelectorAll('.tab').forEach((t,i)=>{
-    const names=['input','history','search'];
-    t.classList.toggle('active',names[i]===name);
+    ['input','history','search'].forEach((n,j)=>{ if(i===j) t.classList.toggle('active',n===name); });
   });
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
-  if(name==='history')loadHistory(currentFilter);
+  if(name==='history') loadHistory(currentFilter);
 }
 
 function calculate(){
@@ -310,12 +323,10 @@ function calculate(){
     basePrice=PRICES.hotel[hotelType]*nights;
     const htNames={'cho-small':'Cún 1–10kg','cho-large':'Cún 10–20kg','meo-deluxe':'Miu Deluxe','meo-standard':'Miu Standard','meo-vip':'Miu VIP'};
     pkgDisplay+=' — '+htNames[hotelType]+' × '+nights+' ngày';
-  } else {
-    basePrice=getPrice(pkg,petType,weight);
-  }
+  } else basePrice=getPrice(pkg,petType,weight);
+
   const pct=COMM[pkg][loyal?'loyal':'regular'];
   const commission=Math.round(basePrice*pct/100);
-
   currentBill={phone,petName:petname,petType,gender,weight,package:pkg,hotelType,nights,basePrice,isLoyal:loyal,commissionPct:pct,commission};
 
   document.getElementById('res-pet').textContent=petname+' ('+(petType==='cho'?'Cún':'Miu')+', '+(gender==='male'?'Đực':'Cái')+', '+weight+'kg)';
@@ -338,26 +349,12 @@ async function saveBill(){
   btn.disabled=true;btn.textContent='Đang lưu...';
   try{
     const b=currentBill;
-    const params=new URLSearchParams({
-      action:'addBill',
-      phone:b.phone, petName:b.petName, petType:b.petType,
-      gender:b.gender, weight:b.weight, package:b.package,
-      hotelType:b.hotelType, nights:b.nights, basePrice:b.basePrice,
-      isLoyal:b.isLoyal, commissionPct:b.commissionPct, commission:b.commission
-    });
+    const params=new URLSearchParams({action:'addBill',phone:b.phone,petName:b.petName,petType:b.petType,gender:b.gender,weight:b.weight,package:b.package,hotelType:b.hotelType,nights:b.nights,basePrice:b.basePrice,isLoyal:b.isLoyal,commissionPct:b.commissionPct,commission:b.commission});
     const res=await fetch(API+'?'+params.toString());
     const data=await res.json();
-    if(data.success){
-      showToast('Đã lưu bill '+data.id+'!','ok');
-      btn.style.display='none';
-    } else {
-      showToast('Lỗi: '+data.error,'err');
-      btn.disabled=false;btn.textContent='Lưu bill vào database';
-    }
-  } catch(e){
-    showToast('Lỗi kết nối: '+e.message,'err');
-    btn.disabled=false;btn.textContent='Lưu bill vào database';
-  }
+    if(data.success){showToast('Đã lưu bill '+data.id+'!','ok');btn.style.display='none';}
+    else{showToast('Lỗi: '+data.error,'err');btn.disabled=false;btn.textContent='Lưu bill vào database';}
+  }catch(e){showToast('Lỗi kết nối','err');btn.disabled=false;btn.textContent='Lưu bill vào database';}
 }
 
 function resetForm(){
@@ -381,17 +378,29 @@ function setFilter(f,el){
   currentFilter=f;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
-  loadHistory(f);
+  const picker=document.getElementById('daterange-picker');
+  picker.style.display=f==='daterange'?'block':'none';
+  if(f!=='daterange') loadHistory(f);
 }
 
-async function loadHistory(filter){
+function applyDateRange(){
+  const from=document.getElementById('date-from').value;
+  const to=document.getElementById('date-to').value;
+  if(!from||!to){showToast('Chọn đủ ngày bắt đầu và kết thúc','err');return;}
+  if(from>to){showToast('Ngày bắt đầu phải trước ngày kết thúc','err');return;}
+  loadHistory('daterange',from,to);
+}
+
+async function loadHistory(filter,dateFrom,dateTo){
   document.getElementById('history-list').innerHTML='<div class="loading">Đang tải...</div>';
   try{
-    const res=await fetch(API+'?action=query&filter='+filter);
+    let url=API+'?action=query&filter='+filter;
+    if(filter==='daterange'&&dateFrom&&dateTo) url+='&dateFrom='+dateFrom+'&dateTo='+dateTo;
+    const res=await fetch(url);
     const data=await res.json();
     if(data.success) renderBills(data,'history-list','sum-count','sum-price','sum-comm');
     else document.getElementById('history-list').innerHTML='<div class="empty">Lỗi tải dữ liệu</div>';
-  } catch(e){
+  }catch(e){
     document.getElementById('history-list').innerHTML='<div class="empty">Không kết nối được</div>';
   }
 }
@@ -405,13 +414,14 @@ async function doSearch(){
   try{
     const res=await fetch(API+'?action=query&filter=all&search='+encodeURIComponent(q)+'&searchType='+type);
     const data=await res.json();
-    if(data.success){
-      document.getElementById('search-summary').style.display='grid';
-      renderBills(data,'search-list','srch-count','srch-price','srch-comm');
-    }
-  } catch(e){
-    document.getElementById('search-list').innerHTML='<div class="empty">Không kết nối được</div>';
-  }
+    if(data.success){document.getElementById('search-summary').style.display='grid';renderBills(data,'search-list','srch-count','srch-price','srch-comm');}
+  }catch(e){document.getElementById('search-list').innerHTML='<div class="empty">Không kết nối được</div>';}
+}
+
+function formatTimestamp(ts){
+  if(!ts) return '';
+  if(ts.includes('GMT')||ts.includes('Indochina')) return ts;
+  return ts;
 }
 
 function renderBills(data,listId,countId,priceId,commId){
