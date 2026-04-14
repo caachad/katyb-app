@@ -217,6 +217,11 @@ input:focus,select:focus{border-color:#185FA5;box-shadow:0 0 0 3px rgba(24,95,16
       <button class="filter-btn" onclick="setFilter('thismonth',this)">Tháng này</button>
       <button class="filter-btn" onclick="setFilter('daterange',this)">Khoảng ngày</button>
     </div>
+    <div style="margin-bottom:10px">
+      <select id="ktv-filter" onchange="reloadHistory()" style="width:100%;font-size:13px;padding:8px 12px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none;-webkit-appearance:none">
+        <option value="">KTV: Tất cả</option>
+      </select>
+    </div>
     <div id="daterange-picker" style="display:none">
       <div class="daterange-row">
         <div>
@@ -317,7 +322,7 @@ function switchTab(name){
   });
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
-  if(name==='history') loadHistory(currentFilter);
+  if(name==='history'){loadHistory(currentFilter);loadTechnicians();}
 }
 
 function calculate(){
@@ -407,6 +412,15 @@ function setFilter(f,el){
   if(f!=='daterange') loadHistory(f);
 }
 
+function reloadHistory(){
+  if(currentFilter!=='daterange') loadHistory(currentFilter);
+  else{
+    const from=document.getElementById('date-from').value;
+    const to=document.getElementById('date-to').value;
+    if(from&&to) loadHistory('daterange',from,to);
+  }
+}
+
 function applyDateRange(){
   const from=document.getElementById('date-from').value;
   const to=document.getElementById('date-to').value;
@@ -415,11 +429,29 @@ function applyDateRange(){
   loadHistory('daterange',from,to);
 }
 
+async function loadTechnicians(){
+  try{
+    const res=await fetch(API+'?action=getTechnicians');
+    const data=await res.json();
+    if(data.success&&data.technicians){
+      const sel=document.getElementById('ktv-filter');
+      sel.innerHTML='<option value="">KTV: Tất cả</option>';
+      data.technicians.forEach(t=>{
+        const opt=document.createElement('option');
+        opt.value=t;opt.textContent=t;
+        sel.appendChild(opt);
+      });
+    }
+  }catch(e){}
+}
+
 async function loadHistory(filter,dateFrom,dateTo){
   document.getElementById('history-list').innerHTML='<div class="loading">Đang tải...</div>';
+  const ktv=document.getElementById('ktv-filter').value;
   try{
     let url=API+'?action=query&filter='+filter;
     if(filter==='daterange'&&dateFrom&&dateTo) url+='&dateFrom='+dateFrom+'&dateTo='+dateTo;
+    if(ktv) url+='&technician='+encodeURIComponent(ktv);
     const res=await fetch(url);
     const data=await res.json();
     if(data.success) renderBills(data,'history-list','sum-count','sum-price','sum-comm');
@@ -472,6 +504,7 @@ function renderBills(data,listId,countId,priceId,commId){
 }
 
 loadHistory('today');
+loadTechnicians();
 </script>
 </body>
 </html>
